@@ -5,6 +5,7 @@ public class StepTracker {
         System.out.println("Command list:\n"
                 + "Change goal;\n" + "Input moth;\n" + "Input steps;\n" + "Show stats;\n"
                 + "For exit print exit");
+        fillDays();
     }
     Scanner scanner = new Scanner(System.in);
     int goal = 10000;
