@@ -23,11 +23,11 @@ public class Main {
                     break;
 
                 case "Show stats":
-                   step.showStats();
+                    step.showStats();
                     break;
 
                 case "exit":
-                     isRunning = false;
+                    isRunning = false;
                     break;
 
                 case "":
