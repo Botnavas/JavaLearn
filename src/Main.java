@@ -6,6 +6,10 @@ public class Main {
         StepTracker step = new StepTracker();
         boolean isRunning = true;
 
+        System.out.println("Command list:\n"
+                + "Change goal;\n" + "Enter steps;\n" + "Show stats;\n"
+                + "help;\n" +"For exit print exit\n\n" + "Date format: month.day ");
+
         while (isRunning) {
             String command = scanner.nextLine();
 
@@ -14,12 +18,8 @@ public class Main {
                     step.changeGoal();
                     break;
 
-                case "Input months":
-                    step.inputMonths();
-                    break;
-
-                case "Input steps":
-                    step.inputSteps();
+                case "Enter steps":
+                    step.enterSteps();
                     break;
 
                 case "Show stats":
@@ -30,12 +30,16 @@ public class Main {
                     isRunning = false;
                     break;
 
-                case "":
+                case "help":
+                    System.out.println("Command list:\n"
+                            + "Change goal;\n" + "Input moth;\n" + "Enter steps;\n" + "Show stats;\n"
+                            + "help;\n" +"For exit print exit\n\n" + "Date format: month.day ");
                     break;
+
+                case "":
 
                 default:
                     System.out.println("Error: incorrect command");
-                    break;
             }
         }
     }

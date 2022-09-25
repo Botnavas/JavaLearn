@@ -1,57 +1,51 @@
 import java.util.Scanner;
 
 public class StepTracker {
-    StepTracker() {
-        System.out.println("Command list:\n"
-                + "Change goal;\n" + "Input moth;\n" + "Input steps;\n" + "Show stats;\n"
-                + "For exit print exit");
-        fillDays();
-    }
-    Scanner scanner = new Scanner(System.in);
-    int goal = 10000;
-    int month = 0;
-    int[] days = new int[30];
-    double stepLength = 0.0007;
-    double caloriesPerStep = 0.15;
 
-    void fillDays()
-    {
-        for (int i = 0; i < 30; i++) {
-            days[i] = 0;
+    Scanner scanner = new Scanner(System.in);
+
+    double stepLength = 0.0007;
+    double caloriesPerStep = 0.075;
+
+    StepsPerMonth[] month = new StepsPerMonth[12];
+
+    StepTracker() {
+        for (int i = 0; i < 12; i++) {
+            month[i] = new StepsPerMonth(i);
         }
     }
 
-    int findMaximumStepsPerMonths() {
+
+    int findMaximumStepsPerMonths( int monthNumber) {
         int maximum = 0;
 
         for (int i = 0; i < 30; i++) {
-            if (days[i] > maximum) {
-                maximum = days[i];
+            if (month[monthNumber].days[i]> maximum) {
+                maximum = month[monthNumber].days[i];
             }
         }
         return maximum;
     }
 
-    int findAverageStep() {
+    int findAverageStep( int monthNumber) {
         int average = 0;
 
         for (int i = 0; i < 30; i++) {
-            average += days[i];
+            average += month[monthNumber].days[i];
         }
         return average / 30;
     }
 
-    int findBestSeries() {
+    int findBestSeries( int monthNumber) {
         int series = 0;
         int bestSeries = 0;
 
         for (int i = 0; i < 30; i++) {
-            if (days[i] >= goal) {
+            if (month[monthNumber].days[i] >=  month[monthNumber].goal[i]) {
                 for (int j = i; j < 30; j++) {
-                    if (days[j] >= goal) {
+                    if (month[monthNumber].days[j] >= month[monthNumber].goal[j]) {
                         series++;
-                    }
-                    else {
+                    } else {
                         if (series > bestSeries) {
                             bestSeries = series;
                         }
@@ -65,87 +59,120 @@ public class StepTracker {
         return bestSeries;
     }
 
-    double calculateCaloriesPerDay(int day) {
-        return days[day] * caloriesPerStep;
+    double calculateCaloriesPerDay(int monthNumber, int day) {
+        return month[monthNumber].days[day] * caloriesPerStep;
     }
 
-    double calculateKmPerDay(int day) {
-        return days[day] * stepLength;
+    double calculateKmPerDay(int monthNumber, int day) {
+        return month[monthNumber].days[day] * stepLength;
     }
 
-    double calculateTotalBurnt() {
+    double calculateTotalBurnt(int monthNumber) {
         double burnt = 0;
 
         for (int i = 0; i < 30; i++) {
-            burnt += calculateCaloriesPerDay(i);
+            burnt += calculateCaloriesPerDay(i, monthNumber);
         }
         return burnt;
     }
 
-    double calculateTotalKm() {
+    double calculateTotalKm(int monthNumber) {
         double km = 0;
 
         for (int i = 0; i < 30; i++) {
-            km += calculateKmPerDay(i);
+            km += calculateKmPerDay(i, monthNumber);
         }
         return km;
     }
 
     void changeGoal() {
-        System.out.println("Current goal is: " + goal + ". Print new goal");
-        int newGoal = scanner.nextInt();
 
-        if (newGoal > 0) {
-            goal = newGoal;
-            System.out.println("New goal is: " + goal + " steps");
-        }
-        else  {
-            System.out.println("Error: goal less than 0");
-        }
-    }
+        int startingMonth;
+        int startingDay;
+        int newGoal;
+        System.out.println("Enter date of starting new goal. Enter month now");
+        startingMonth = scanner.nextInt();
 
-    void inputMonths() {
-        System.out.println("Current month is: " + month+ ". Print number of month");
-        int newMonth = scanner.nextInt();
-
-        if (newMonth > 0 && newMonth <= 12) {
-            month = newMonth;
-        }
-        else {
+        if (startingMonth >= 0 && startingMonth < 12) {
+            System.out.println("Month when new goal starts: " + startingMonth
+                    + ". Enter day when new goal will be actual");
+        } else  {
             System.out.println("Error: incorrect month");
+            return;
         }
-    }
 
-    void inputSteps() {
-        System.out.println("Print day of month, 0 for first day, 29 for last day");
-        int day = scanner.nextInt();
+        startingDay = scanner.nextInt();
+        if (startingDay >= 0 && startingDay < 30) {
+            System.out.println("Date when new goal starts: " + startingMonth + "." + startingDay
+                + ". Goal for this day: " + month[startingMonth].goal[startingDay]
+                + " steps. Enter new goal");
+        } else  {
+            System.out.println("Error: incorrect day.");
+            return;
+        }
 
-        if (day >= 0 && day < 30) {
-            System.out.println("Print amount of steps");
-            int steps = scanner.nextInt();
-            if ( steps >= 0) {
-                System.out.println("Steps for " + day + "day is: " + steps);
-                days[day] = steps;
-            }
-            else {
-                System.out.println("Error: amount of steps should be positive");
+        newGoal = scanner.nextInt();
+        if (newGoal > 0) {
+            month[startingMonth].setGoalForMonthFromCurrentDay(startingDay, newGoal);
+            for (int i = startingMonth + 1; i < 12; i++) {
+                month[i].setGoalForMonthFromCurrentDay(0, newGoal);
             }
         } else {
-            System.out.println("Error: incorrect day");
+            System.out.println("Incorrect goal.");
+        }
+    }
+
+    void enterSteps() {
+        int currentMonth;
+        int day;
+        int steps;
+        System.out.println("Enter date. Print month first");
+        currentMonth = scanner.nextInt();
+
+        if (currentMonth >= 0 && currentMonth < 30) {
+            System.out.println("Enter day");
+        } else {
+            System.out.println("Incorrect month");
+            return;
+        }
+
+        day = scanner.nextInt();
+        if (day >= 0 && day < 30) {
+            System.out.println("Date is :" + currentMonth + ". " + day + ". Enter steps");
+        } else {
+            System.out.println("Incorrect day");
+            return;
+        }
+
+        steps = scanner.nextInt();
+        if (steps >=0 ) {
+            month[currentMonth].days[day] = steps;
+        } else {
+            System.out.println("Incorrect amount of steps");
         }
     }
 
     void showStats()
     {
-        for (int i = 0 ; i < 30; i++) {
-            System.out.println("Day" + i + ": " + days[i] + "steps, calories burnt: "
-                    + calculateCaloriesPerDay(i) + " calories, distance was: " + calculateKmPerDay(i) + "km");
+        int currentMonth;
+        System.out.println("Enter month");
+        currentMonth = scanner.nextInt();
+
+        if (currentMonth < 0 || currentMonth >= 12) {
+            System.out.println("Incorrect month");
+            return;
         }
-        System.out.println("Best steps per day was: " + findMaximumStepsPerMonths() + " steps");
-        System.out.println("Best series was: " + findBestSeries() + " days");
-        System.out.println("Average step per day: " + findAverageStep() + " steps");
-        System.out.println("Total distance was: " + calculateTotalKm() + " km");
-        System.out.println("Total calories burnt: " + calculateTotalBurnt() + " calories");
+
+        for (int i = 0 ; i < 30; i++) {
+            System.out.println("Day" + i + ": " + month[currentMonth].days[i] + "steps, calories burnt: "
+                    + calculateCaloriesPerDay(currentMonth, i) + " calories, distance was: "
+                    + calculateKmPerDay(currentMonth, i) + "km");
+        }
+        System.out.println("Best steps per day was: " + findMaximumStepsPerMonths(currentMonth) + " steps");
+        System.out.println("Best series was: " + findBestSeries(currentMonth) + " days");
+        System.out.println("Average step per day: " + findAverageStep(currentMonth) + " steps");
+        System.out.println("Total distance was: " + calculateTotalKm(currentMonth) + " km");
+        System.out.println("Total calories burnt: " + calculateTotalBurnt(currentMonth) + " calories");
     }
 }
 
