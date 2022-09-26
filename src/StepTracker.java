@@ -3,18 +3,16 @@ import java.util.Scanner;
 public class StepTracker {
 
     Scanner scanner = new Scanner(System.in);
-
+    int startGoal = 10000;
     double stepLength = 0.0007;
     double caloriesPerStep = 0.075;
-
     MonthData[] monthData = new MonthData[12];
 
     StepTracker() {
         for (int i = 0; i < 12; i++) {
-            monthData[i] = new MonthData(i);
+            monthData[i] = new MonthData(i, startGoal);
         }
     }
-
 
     int findMaximumStepsPerMonths(int monthNumber) {
         int maximum = 0;
@@ -120,6 +118,7 @@ public class StepTracker {
         int currentMonth;
         int day;
         int steps;
+
         System.out.println("Enter date. Print monthData first");
         currentMonth = scanner.nextInt();
 
@@ -149,6 +148,7 @@ public class StepTracker {
     void showStats()
     {
         int currentMonth;
+
         System.out.println("Enter monthData");
         currentMonth = scanner.nextInt();
 

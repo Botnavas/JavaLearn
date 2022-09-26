@@ -9,10 +9,8 @@ public class Main {
         System.out.println("Command list:\n"
                 + "Change goal;\n" + "Enter steps;\n" + "Show stats;\n"
                 + "help;\n" +"For exit print exit\n\n" + "Date format: monthData.day ");
-
         while (isRunning) {
             String command = scanner.nextLine();
-
             switch (command) {
                 case "Change goal":
                     step.changeGoal();

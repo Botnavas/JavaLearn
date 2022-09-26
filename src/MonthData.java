@@ -3,9 +3,9 @@ public class MonthData {
     int[] goal = new int[30];
     int number;
 
-    void fillGoal() {
+    void fillGoal(int startGoal) {
         for (int i = 0; i < 30; i++) {
-            goal[i] = 10000;
+            goal[i] = startGoal;
         }
     }
 
@@ -15,8 +15,8 @@ public class MonthData {
         }
     }
 
-    MonthData(int month) {
+    MonthData(int month, int startGoal) {
         number = month;
-        fillGoal();
+        fillGoal(startGoal);
     }
 }
