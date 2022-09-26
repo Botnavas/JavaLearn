@@ -8,7 +8,7 @@ public class Main {
 
         System.out.println("Command list:\n"
                 + "Change goal;\n" + "Enter steps;\n" + "Show stats;\n"
-                + "help;\n" +"For exit print exit\n\n" + "Date format: month.day ");
+                + "help;\n" +"For exit print exit\n\n" + "Date format: monthData.day ");
 
         while (isRunning) {
             String command = scanner.nextLine();
@@ -33,7 +33,7 @@ public class Main {
                 case "help":
                     System.out.println("Command list:\n"
                             + "Change goal;\n" + "Input moth;\n" + "Enter steps;\n" + "Show stats;\n"
-                            + "help;\n" +"For exit print exit\n\n" + "Date format: month.day ");
+                            + "help;\n" +"For exit print exit\n\n" + "Date format: monthData.day ");
                     break;
 
                 case "":
